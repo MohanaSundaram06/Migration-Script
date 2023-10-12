@@ -14,6 +14,7 @@ public class Main {
             ResultSet resultSet = mysqlStatement.executeQuery("SELECT * FROM employee");
 
             MongoClient mongoClient = new MongoClient("localhost", 27017);
+//            System.out.println(mongoClient.getDatabaseNames());
             MongoDatabase mongoDatabase = mongoClient.getDatabase("testMongo");
             MongoCollection<Document> employeeCollection = mongoDatabase.getCollection("employee");
 
@@ -25,11 +26,12 @@ public class Main {
                 totalRecords++;
                 try {
                     Document record = new Document();
-                    record.append("id", resultSet.getInt("id"))
-                            .append("name", resultSet.getString("name"))
-                            .append("age", resultSet.getInt("age"));
+                    record.put("id", resultSet.getInt("id"));
+                    record.put("name", resultSet.getString("name"));
+                    record.put("age", resultSet.getInt("age"));
 
                     employeeCollection.insertOne(record);
+                    System.out.println("Recorded Inserted");
                     migratedRecords ++;
 
                 } catch (Exception e) {
